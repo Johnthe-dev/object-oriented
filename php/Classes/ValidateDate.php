@@ -1,5 +1,5 @@
 <?php
-namespace Johnthedev\objectoriented;
+namespace Johnthedev\Author;
 /**
  * Trait to Validate a mySQL Date
  *

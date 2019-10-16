@@ -1,6 +1,6 @@
 <?php
 
-namespace Johnthedev\objectoriented;
+namespace JohnTheDev\Author;
 
 require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 
