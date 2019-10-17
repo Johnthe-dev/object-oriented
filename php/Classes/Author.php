@@ -19,31 +19,54 @@ use Ramsey\Uuid\Uuid;
 class author{
 	use validateUuid;
 	/**
-	 * id for author; Primary Key
+	 * id for author; Primary Key Not Null
 	 * @var Uuid $authorId
 	 */
 	private $authorId;
 	/**
-	 * Avatar URL for author;
-	 * @var
+	 * Avatar URL for author
+	 * @var string $authorAvatarUrl
 	 */
 	private $authorAvatarUrl;
 	/**
 	 *Activation Token used for Author NOT UUID
+	 * @var $authorActivationToken
 	 */
 	private $authorActivationToken;
 	/**
-	 *author's Email
+	 *author's Email Unique Not Null
+	 * @var string $authorEmail
 	 */
 	private $authorEmail;
 	/**
-	 *One way encryption of author's password
-	 * @var
+	 *One way encryption of author's password Not Null
+	 * @var $authorHash
 	 */
 	private $authorHash;
 	/**
-	 *author's chosen username
-	 * Not Null
+	 *author's chosen username Unique Not Null
+	 * @var string $authorUsername
 	 */
 	private $authorUsername;
+
+	public function getAuthorId(): Uuid {
+		return ($this->authorId);
+	}
+	/**
+	 * mutator method for profile id
+	 *
+	 * @param  Uuid| string $newProfileId value of new profile id
+	 * @throws \RangeException if $newProfileId is not positive
+	 * @throws \TypeError if the profile Id is not
+	 **/
+	public function setProfileId( $newAuthorId): void {
+		try {
+			$uuid = self::validateUuid($newAuthorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the profile id
+		$this->authorId = $uuid;
+	}
 }
