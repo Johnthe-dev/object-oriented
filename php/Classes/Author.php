@@ -4,7 +4,7 @@ namespace JohnTheDev\Author;
 
 require_once("autoload.php");
 
-require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
+require_once(dirname(__DIR__) . "/lib/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 /** Author Class for Object-Oriented-Phase 1
@@ -16,23 +16,23 @@ use Ramsey\Uuid\Uuid;
  * @author John Johnson-Rodgers <john@johnthe.dev>
  * @version 1.0.0
  */
-class author{
-	use validateUuid;
+class Author{
+	use ValidateUuid;
 	/**
 	 * id for author; Primary Key Not Null
 	 * @var Uuid $authorId
 	 */
 	private $authorId;
 	/**
-	 * Avatar URL for author
-	 * @var string $authorAvatarUrl
-	 */
-	private $authorAvatarUrl;
-	/**
 	 *Activation Token used for Author NOT UUID
 	 * @var $authorActivationToken
 	 */
 	private $authorActivationToken;
+	/**
+	 * Avatar URL for author
+	 * @var string $authorAvatarUrl
+	 */
+	private $authorAvatarUrl;
 	/**
 	 *author's Email Unique Not Null
 	 * @var string $authorEmail
@@ -49,7 +49,31 @@ class author{
 	 */
 	private $authorUsername;
 
+		/**
+	 * @return Uuid
+	 */
 	public function getAuthorId(): Uuid {
+		return ($this->authorId);
+	}
+	/**
+	 * mutator method for profile id
+	 *
+	 * @param  Uuid| string $newAuthorId value of new profile id
+	 * @throws \RangeException if $newAuthorId is not positive
+	 * @throws \TypeError if the author Id is not
+	 **/
+	public function setAuthorId( $newAuthorId): void {
+		try {
+			$uuid = self::validateUuid($newAuthorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the profile id
+		$this->authorId = $uuid;
+	}
+
+	public function getAuthorActivationToken(): Uuid {
 		return ($this->authorId);
 	}
 	/**
@@ -59,7 +83,32 @@ class author{
 	 * @throws \RangeException if $newProfileId is not positive
 	 * @throws \TypeError if the profile Id is not
 	 **/
-	public function setProfileId( $newAuthorId): void {
+
+
+		public function setAuthorActivationToken( $newAuthorId): void {
+			try {
+				$uuid = self::validateUuid($newAuthorId);
+			} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+				$exceptionType = get_class($exception);
+				throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			}
+			// convert and store the profile id
+			$this->authorId = $uuid;
+		}
+
+		public function getAuthorAvatarUrl(): Uuid {
+		return ($this->authorId);
+	}
+		/**
+		 * mutator method for profile id
+		 *
+		 * @param  Uuid| string $newProfileId value of new profile id
+		 * @throws \RangeException if $newProfileId is not positive
+		 * @throws \TypeError if the profile Id is not
+		 **/
+
+
+	public function setAuthorAvatarUrl($newAuthorId): void {
 		try {
 			$uuid = self::validateUuid($newAuthorId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -68,5 +117,26 @@ class author{
 		}
 		// convert and store the profile id
 		$this->authorId = $uuid;
+	}
+
+	//Write and document constructor method
+
+	/**
+	 * constructor for this Author
+	 *
+	 * @param string|Uuid $newAuthorId id of this author or null if a new author
+	 **/
+	public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
+		try {
+			$this->setAuthorId($newAuthorId);
+			$this->setAuthorActivationToken($newAuthorActivationToken);
+			$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
+			$this->setAuthorEmail($newAuthorEmail);
+			$this->setAuthorHash($newAuthorHash);
+			$this->setAuthorUsername($newAuthorUsername);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 101, $exception));
+		}
 	}
 }
