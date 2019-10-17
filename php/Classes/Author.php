@@ -211,23 +211,28 @@ class Author{
 		return ($this->authorUsername);
 	}
 	/**
-	 * mutator method for profile id
+	 * mutator method for author username
 	 *
-	 * @param  Uuid| string $newProfileId value of new profile id
-	 * @throws \RangeException if $newProfileId is not positive
-	 * @throws \TypeError if the profile Id is not
+	 * @param string $newAuthorUsername new value of at handle
+	 * @throws \InvalidArgumentException if $newAuthorUsername is not a string or insecure
+	 * @throws \RangeException if $newAuthorUsername is > 32 characters
+	 * @throws \TypeError if $newAuthorUsername is not a string
 	 **/
 
 
-	public function setAuthorUsername($newAuthorId): void {
-		try {
-			$uuid = self::validateUuid($newAuthorId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	public function setAuthorUsername(string $newAuthorUsername): void {
+		// verify the username is secure
+		$newAuthorUsername = trim($newAuthorUsername);
+		$newAuthorUsername = filter_var($newAuthorUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorUsername) === true) {
+			throw(new \InvalidArgumentException("author username is empty or insecure"));
 		}
-		// convert and store the profile id
-		$this->authorId = $uuid;
+		// verify the username will fit in the database
+		if(strlen($newAuthorUsername) > 32) {
+			throw(new \RangeException("author username is too large"));
+		}
+		// store the username
+		$this->authorUsername = $newAuthorUsername;
 	}
 
 	//Write and document constructor method
