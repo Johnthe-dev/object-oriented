@@ -50,6 +50,30 @@ class Author{
 	private $authorUsername;
 
 	/**
+	 * constructor for this Author
+	 *
+	 * @param string|Uuid $newAuthorId id of this author or null if a new author
+	 * @param string $newAuthorActivationToken Activation Token for author or null if a new author
+	 * @param string $newAuthorAvatarUrl Avatar Url of this author or null if a new author
+	 * @param string $newAuthorEmail email of this author or null if a new author
+	 * @param string $newAuthorHash hash of this author or null if a new author
+	 * @param string $newAuthorUsername username of this author or null if a new author
+	 *
+	 **/
+	public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
+		try {
+			$this->setAuthorId($newAuthorId);
+			$this->setAuthorActivationToken($newAuthorActivationToken);
+			$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
+			$this->setAuthorEmail($newAuthorEmail);
+			$this->setAuthorHash($newAuthorHash);
+			$this->setAuthorUsername($newAuthorUsername);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 101, $exception));
+		}
+	}
+	/**
 	 *accessor method for authorId
 	 *
 	 * @return Uuid for authorId
@@ -80,7 +104,7 @@ class Author{
 	 *
 	 * @return string for authorActivationToken
 	 */
-	public function getAuthorActivationToken(): ?string {
+	public function getAuthorActivationToken(): string {
 		return ($this->authorActivationToken);
 	}
 	/**
@@ -127,7 +151,7 @@ class Author{
 		 **/
 
 
-	public function setAuthorAvatarUrl($newAuthorAvatarUrl): void {
+	public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
 		//enforce that the Avatar Url is less than or equal to 255 characters.
 		if(strlen($newAuthorAvatarUrl) > 255) {
 			throw(new \RangeException("profile Avatar Url must be less than or equal to 255 characters"));
@@ -150,7 +174,7 @@ class Author{
 	 * @throws \InvalidArgumentException if $newAuthorEmail is empty or insecure
 	 * @throws \RangeException if the author email is too large
 	 **/
-	public function setAuthorEmail( $newAuthorEmail): void {
+	public function setAuthorEmail(string $newAuthorEmail): void {
 		// verify the email is secure
 		$newAuthorEmail = trim($newAuthorEmail);
 		$newAuthorEmail = filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
@@ -183,7 +207,7 @@ class Author{
 	 **/
 
 
-	public function setAuthorHash( string $newAuthorHash): void {
+	public function setAuthorHash(string $newAuthorHash): void {
 		//enforce that the hash is properly formatted
 		$newAuthorHash = trim($newAuthorHash);
 		$newAuthorHash = strtolower($newAuthorHash);
@@ -237,28 +261,4 @@ class Author{
 
 	//Write and document constructor method
 
-	/**
-	 * constructor for this Author
-	 *
-	 * @param string|Uuid $newAuthorId id of this author or null if a new author
-	 * @param string $newAuthorActivationToken Activation Token for author or null if a new author
-	 * @param string $newAuthorAvatarUrl Avatar Url of this author or null if a new author
-	 * @param string $newAuthorEmail email of this author or null if a new author
-	 * @param string $newAuthorHash hash of this author or null if a new author
-	 * @param string $newAuthorUsername username of this author or null if a new author
-	 *
-	 **/
-	public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
-		try {
-			$this->setAuthorId($newAuthorId);
-			$this->setAuthorActivationToken($newAuthorActivationToken);
-			$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
-			$this->setAuthorEmail($newAuthorEmail);
-			$this->setAuthorHash($newAuthorHash);
-			$this->setAuthorUsername($newAuthorUsername);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 101, $exception));
-		}
-	}
 }
