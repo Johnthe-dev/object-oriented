@@ -241,6 +241,12 @@ class Author{
 	 * constructor for this Author
 	 *
 	 * @param string|Uuid $newAuthorId id of this author or null if a new author
+	 * @param string $newAuthorActivationToken Activation Token for author or null if a new author
+	 * @param string $newAuthorAvatarUrl Avatar Url of this author or null if a new author
+	 * @param string $newAuthorEmail email of this author or null if a new author
+	 * @param string $newAuthorHash hash of this author or null if a new author
+	 * @param string $newAuthorUsername username of this author or null if a new author
+	 *
 	 **/
 	public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
 		try {
