@@ -73,8 +73,8 @@ class Author{
 		$this->authorId = $uuid;
 	}
 
-	public function getAuthorActivationToken(): Uuid {
-		return ($this->authorId);
+	public function getAuthorActivationToken(): string {
+		return ($this->authorActivationToken);
 	}
 	/**
 	 * mutator method for profile id
@@ -97,7 +97,7 @@ class Author{
 		}
 
 		public function getAuthorAvatarUrl(): Uuid {
-		return ($this->authorId);
+		return ($this->authorAvatarUrl);
 	}
 		/**
 		 * mutator method for profile id
@@ -109,6 +109,72 @@ class Author{
 
 
 	public function setAuthorAvatarUrl($newAuthorId): void {
+		try {
+			$uuid = self::validateUuid($newAuthorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the profile id
+		$this->authorId = $uuid;
+	}
+	public function getAuthorEmail(): Uuid {
+		return ($this->authorEmail);
+	}
+	/**
+	 * mutator method for profile id
+	 *
+	 * @param  Uuid| string $newAuthorId value of new profile id
+	 * @throws \RangeException if $newAuthorId is not positive
+	 * @throws \TypeError if the author Id is not
+	 **/
+	public function setAuthorEmail( $newAuthorId): void {
+		try {
+			$uuid = self::validateUuid($newAuthorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the profile id
+		$this->authorId = $uuid;
+	}
+
+	public function getAuthorHash(): Uuid {
+		return ($this->authorHash);
+	}
+	/**
+	 * mutator method for profile id
+	 *
+	 * @param  Uuid| string $newProfileId value of new profile id
+	 * @throws \RangeException if $newProfileId is not positive
+	 * @throws \TypeError if the profile Id is not
+	 **/
+
+
+	public function setAuthorHash( $newAuthorId): void {
+		try {
+			$uuid = self::validateUuid($newAuthorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		// convert and store the profile id
+		$this->authorId = $uuid;
+	}
+
+	public function getAuthorUsername(): Uuid {
+		return ($this->authorUsername);
+	}
+	/**
+	 * mutator method for profile id
+	 *
+	 * @param  Uuid| string $newProfileId value of new profile id
+	 * @throws \RangeException if $newProfileId is not positive
+	 * @throws \TypeError if the profile Id is not
+	 **/
+
+
+	public function setAuthorUsername($newAuthorId): void {
 		try {
 			$uuid = self::validateUuid($newAuthorId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
