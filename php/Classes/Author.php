@@ -215,9 +215,9 @@ class Author{
 			throw(new \InvalidArgumentException("author password hash empty or insecure"));
 		}
 		//enforce that the hash is a string representation of a hexadecimal
-		if(!ctype_xdigit($newAuthorHash)) {
+		/*if(!ctype_xdigit($newAuthorHash)) {
 			throw(new \InvalidArgumentException("author password hash is empty or insecure"));
-		}
+		}*/
 		//enforce that the hash is exactly 128 characters.
 		if(strlen($newAuthorHash) !== 128) {
 			throw(new \RangeException("author hash must be 128 characters"));
