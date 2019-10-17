@@ -49,8 +49,10 @@ class Author{
 	 */
 	private $authorUsername;
 
-		/**
-	 * @return Uuid
+	/**
+	 *accessor method for authorId
+	 *
+	 * @return Uuid for authorId
 	 */
 	public function getAuthorId(): Uuid {
 		return ($this->authorId);
@@ -60,7 +62,7 @@ class Author{
 	 *
 	 * @param  Uuid| string $newAuthorId value of new profile id
 	 * @throws \RangeException if $newAuthorId is not positive
-	 * @throws \TypeError if the author Id is not
+	 * @throws \TypeError if the author Id is not uuid
 	 **/
 	public function setAuthorId( $newAuthorId): void {
 		try {
@@ -73,96 +75,139 @@ class Author{
 		$this->authorId = $uuid;
 	}
 
-	public function getAuthorActivationToken(): string {
+	/**
+	 *accessor method for authorActivationToken
+	 *
+	 * @return string for authorActivationToken
+	 */
+	public function getAuthorActivationToken(): ?string {
 		return ($this->authorActivationToken);
 	}
 	/**
-	 * mutator method for profile id
+	 * mutator method for authorActivationToken
 	 *
-	 * @param  Uuid| string $newProfileId value of new profile id
-	 * @throws \RangeException if $newProfileId is not positive
-	 * @throws \TypeError if the profile Id is not
+	 * @param string $newAuthorActivationToken
+	 * @throws \InvalidArgumentException  if the token is not a string or insecure
+	 * @throws \RangeException if the token is not exactly 32 characters
+	 * @throws \TypeError if the activation token is not a string
 	 **/
 
 
-		public function setAuthorActivationToken( $newAuthorId): void {
-			try {
-				$uuid = self::validateUuid($newAuthorId);
-			} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-				$exceptionType = get_class($exception);
-				throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		public function setAuthorActivationToken(?string $newAuthorActivationToken): void {
+			if($newAuthorActivationToken===null) {
+				$this->authorActivationToken = null;
+				return;
 			}
-			// convert and store the profile id
-			$this->authorId = $uuid;
+			$newAuthorActivationToken = strtolower(trim($newAuthorActivationToken));
+			if(ctype_xdigit($newAuthorActivationToken) === false) {
+				throw(new\RangeException("user activation is not valid"));
+			}
+			//make sure user activation token is exactly 32 characters
+			if(strlen($newAuthorActivationToken) !== 32) {
+				throw(new\RangeException("user activation token has to be 32"));
+			}
+			// store the activation token
+			$this->authorActivationToken = $newAuthorActivationToken;
 		}
 
-		public function getAuthorAvatarUrl(): Uuid {
+
+	/**
+	 *accessor method for authorAvatarUrl
+	 *
+	 *  string for authorAvatarUrl
+	 */
+		public function getAuthorAvatarUrl(): string {
 		return ($this->authorAvatarUrl);
 	}
 		/**
-		 * mutator method for profile id
+		 * mutator method for Author Avatar Url
 		 *
-		 * @param  Uuid| string $newProfileId value of new profile id
-		 * @throws \RangeException if $newProfileId is not positive
-		 * @throws \TypeError if the profile Id is not
+		 * @param  String $newAuthorAvatarUrl value of new Author Avatar Url
+		 * @throws \RangeException if $newProfileId is not less than or equal to 255
 		 **/
 
 
-	public function setAuthorAvatarUrl($newAuthorId): void {
-		try {
-			$uuid = self::validateUuid($newAuthorId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	public function setAuthorAvatarUrl($newAuthorAvatarUrl): void {
+		//enforce that the Avatar Url is less than or equal to 255 characters.
+		if(strlen($newAuthorAvatarUrl) > 255) {
+			throw(new \RangeException("profile Avatar Url must be less than or equal to 255 characters"));
 		}
 		// convert and store the profile id
-		$this->authorId = $uuid;
+		$this->authorAvatarUrl = $newAuthorAvatarUrl;
 	}
-	public function getAuthorEmail(): Uuid {
+	/**
+	 *accessor method for authorEmail
+	 *
+	 * @return string for authorEmail
+	 */
+	public function getAuthorEmail(): string {
 		return ($this->authorEmail);
 	}
 	/**
-	 * mutator method for profile id
+	 * mutator method for authorEmail
 	 *
-	 * @param  Uuid| string $newAuthorId value of new profile id
-	 * @throws \RangeException if $newAuthorId is not positive
-	 * @throws \TypeError if the author Id is not
+	 * @param  string $newAuthorEmail value Author Email
+	 * @throws \InvalidArgumentException if $newAuthorEmail is empty or insecure
+	 * @throws \RangeException if the author email is too large
 	 **/
-	public function setAuthorEmail( $newAuthorId): void {
-		try {
-			$uuid = self::validateUuid($newAuthorId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	public function setAuthorEmail( $newAuthorEmail): void {
+		// verify the email is secure
+		$newAuthorEmail = trim($newAuthorEmail);
+		$newAuthorEmail = filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
+		if(empty($newAuthorEmail) === true) {
+			throw(new \InvalidArgumentException("author email is empty or insecure"));
 		}
-		// convert and store the profile id
-		$this->authorId = $uuid;
+		// verify the email will fit in the database
+		if(strlen($newAuthorEmail) > 128) {
+			throw(new \RangeException("author email is too large"));
+		}
+		// store the email
+		$this->authorEmail = $newAuthorEmail;
 	}
 
-	public function getAuthorHash(): Uuid {
+	/**
+	 *accessor method for authorHash
+	 *
+	 * @return string for authorHash hashed password
+	 */
+	public function getAuthorHash(): string {
 		return ($this->authorHash);
 	}
 	/**
-	 * mutator method for profile id
+	 * mutator method for author hash
 	 *
-	 * @param  Uuid| string $newProfileId value of new profile id
-	 * @throws \RangeException if $newProfileId is not positive
-	 * @throws \TypeError if the profile Id is not
+	 * @param  string $newAuthorHash value of new author hashed password
+	 * @throws \InvalidArgumentException if the hash is not secure
+	 * @throws \RangeException if the hash is not 128 characters
+	 * @throws \TypeError if author hash is not a string
 	 **/
 
 
-	public function setAuthorHash( $newAuthorId): void {
-		try {
-			$uuid = self::validateUuid($newAuthorId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+	public function setAuthorHash( string $newAuthorHash): void {
+		//enforce that the hash is properly formatted
+		$newAuthorHash = trim($newAuthorHash);
+		$newAuthorHash = strtolower($newAuthorHash);
+		if(empty($newAuthorHash) === true) {
+			throw(new \InvalidArgumentException("author password hash empty or insecure"));
 		}
-		// convert and store the profile id
-		$this->authorId = $uuid;
+		//enforce that the hash is a string representation of a hexadecimal
+		if(!ctype_xdigit($newAuthorHash)) {
+			throw(new \InvalidArgumentException("author password hash is empty or insecure"));
+		}
+		//enforce that the hash is exactly 128 characters.
+		if(strlen($newAuthorHash) !== 128) {
+			throw(new \RangeException("author hash must be 128 characters"));
+		}
+		//store the hash
+		$this->authorHash = $newAuthorHash;
 	}
 
-	public function getAuthorUsername(): Uuid {
+	/**
+	 *accessor method for authorUsername
+	 *
+	 * @return string for authorUsername
+	 */
+	public function getAuthorUsername(): string {
 		return ($this->authorUsername);
 	}
 	/**
