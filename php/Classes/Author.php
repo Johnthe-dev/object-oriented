@@ -61,6 +61,7 @@ class Author{
 	 *
 	 **/
 	public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
+
 		try {
 			$this->setAuthorId($newAuthorId);
 			$this->setAuthorActivationToken($newAuthorActivationToken);
@@ -262,3 +263,6 @@ class Author{
 	//Write and document constructor method
 
 }
+
+
+
