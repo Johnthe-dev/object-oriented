@@ -359,6 +359,13 @@ class Author {
 		}
 		return($author);
 	}
+
+	/**
+	 * @param \PDO $pdo
+	 * @param $authorAvatarUrl authorAvatarUrl to search by
+	 * @return \SplFixedArray splfixedarray of authors with authorAvatarUrl
+	 * @throws \PDOException when mySQL related error occurs
+	 */
 	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl) : \SplFixedArray {
 		//no need to change authorAvatarUrl, except to make sure to escape potentially malicious code
 		//add malicious code remover here
@@ -367,12 +374,19 @@ class Author {
 		$statement = $pdo->prepare($query);
 		//bind authorId to the placeholder in template
 		$parameters = ["authorAvatarUrl"=>$authorAvatarUrl];
+
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch())!==false) {
 			try {
 				$author = new Author($row["authorId"],$row["authorActivationToken"],$row["authorAvatarUrl"],$row["authorEmail"],$row["authorHash"],$row["authorUsername"]);
+				$authors[$authors->key()] = $author;
+				$authors->next();
+			} catch(\Exception $exception) {
+				//if the row can't be converted, rethrow
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
+		return($authors);
 	}
 
 }
