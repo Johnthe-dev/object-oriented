@@ -343,6 +343,24 @@ class Author {
 
 		// create query template
 		$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername FROM author where authorId=:authorId";
+		$statement = $pdo->prepare($query);
+
+		// get author from mySQL
+		try {
+			$author = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$author = new Author($row["authorId"],$row["authorActivationToken"],$row["authorAvatarUrl"],$row["authorEmail"],$row["authorHash"],$row["authorUsername"], );
+			}
+		} catch(\Exception $exception) {
+			// if the row can't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception);
+		}
+		return($author);
+	}
+	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl) : \SplFixedArray {
+
 	}
 
 }
