@@ -290,7 +290,7 @@ class Author {
 
 
 	/**
-	 * deletes this Tweet from mySQL
+	 * deletes the author from mySQL
 	 *
 	 * @param \PDO $pdo PDO connection object
 	 * @throws \PDOException when mySQL related errors occur
@@ -303,7 +303,7 @@ class Author {
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holder in the template
-		$parameters = ["tweetId" => $this->tweetId->getBytes()];
+		$parameters = ["authorId" => $this->authorId->getBytes()];
 		$statement->execute($parameters);
 	}
 
@@ -317,12 +317,10 @@ class Author {
 	public function update(\PDO $pdo): void {
 
 		// create query template
-		$query = "UPDATE tweet SET tweetProfileId = :tweetProfileId, tweetContent = :tweetContent, tweetDate = :tweetDate WHERE tweetId = :tweetId";
+		$query = "UPDATE author SET authorActivationToken = :authorActivationToken, authorAvatarUrl = :authorAvatarUrl, authorEmail = :authorEmail, authorHash = :authorHash, authorUsername = :authorUsername WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
 
-
-		$formattedDate = $this->tweetDate->format("Y-m-d H:i:s.u");
-		$parameters = ["tweetId" => $this->tweetId->getBytes(), "tweetProfileId" => $this->tweetProfileId->getBytes(), "tweetContent" => $this->tweetContent, "tweetDate" => $formattedDate];
+		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this -> authorUsername];
 		$statement->execute($parameters);
 	}
 
