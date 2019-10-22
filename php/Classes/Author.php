@@ -362,10 +362,11 @@ class Author {
 
 	/**
 	 * @param \PDO $pdo
-	 * @param $authorAvatarUrl authorAvatarUrl to search by
+	 * @param $authorAvatarUrl Author Avatar Url to search by
 	 * @return \SplFixedArray splfixedarray of authors with authorAvatarUrl
 	 * @throws \PDOException when mySQL related error occurs
 	 */
+	//May seem pointless, but what if the authorAvatarUrl is some sort of indicator of author rating or something? sure, there is no rating attribute...
 	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl) : \SplFixedArray {
 		//no need to change authorAvatarUrl, except to make sure to escape potentially malicious code
 		//add malicious code remover here
