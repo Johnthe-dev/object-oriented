@@ -355,7 +355,7 @@ class Author {
 			}
 		} catch(\Exception $exception) {
 			// if the row can't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception);
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 		return($author);
 	}
