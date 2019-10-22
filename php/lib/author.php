@@ -6,7 +6,7 @@ $bob = new Author\Author('4094c9bf-3a4f-418b-8583-50b116be6c6b',
 	'987deadeadeadeadea49385830deadea',
 	'www.avatarurl.biz',
 	'BigKahuna@www.avatarurl.biz',
-	'HG4xNSLTE6G7jqLxXq69YjELDJp52Umkjfx9sLLfTgzFXwvGn6xSMmf2Na9zHWPXqrVBLrHfvpTRuYRcJy35zx8dzsHwySY7bsKf6MWbyEUkm5e7r72LjNXHrYMyjFSA',
+	'680de7ef6457fd170c1c879cadcae02bb5d4fbe2161990ab34f2d6080c9c74482222e70e5eb023bc21cfccc106b979a7dec9303716cf668abab5cab1795bac5c',
 	'theBigKahuna');
 echo("Author ID:");
 echo($bob -> getAuthorId());
