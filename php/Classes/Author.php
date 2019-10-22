@@ -374,7 +374,9 @@ class Author {
 		$statement = $pdo->prepare($query);
 		//bind authorId to the placeholder in template
 		$parameters = ["authorAvatarUrl"=>$authorAvatarUrl];
-
+		$statement->execute($parameters);
+		//build an array of authors who have same authorAvatarUrl
+		$authors=new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch())!==false) {
 			try {
