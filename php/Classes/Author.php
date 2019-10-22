@@ -324,6 +324,26 @@ class Author {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * gets the author by authorId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param Uuid|string $authorId Author id to search for
+	 * @return Author|null Author found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when a variable are not the correct data type
+	 **/
+	public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
+		// sanitize authorId before running
+		try {
+			$authorId = self::validateUuid($authorId);
+		} catch(\InvalidArgumentException|\RangeException|\Exception|\TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+
+		// create query template
+		$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername FROM author where authorId=:authorId";
+	}
 
 }
 
