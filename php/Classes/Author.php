@@ -351,7 +351,7 @@ class Author {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$author = new Author($row["authorId"],$row["authorActivationToken"],$row["authorAvatarUrl"],$row["authorEmail"],$row["authorHash"],$row["authorUsername"], );
+				$author = new Author($row["authorId"],$row["authorActivationToken"],$row["authorAvatarUrl"],$row["authorEmail"],$row["authorHash"],$row["authorUsername"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row can't be converted, rethrow it
@@ -360,7 +360,19 @@ class Author {
 		return($author);
 	}
 	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl) : \SplFixedArray {
-
+		//no need to change authorAvatarUrl, except to make sure to escape potentially malicious code
+		//add malicious code remover here
+		// create query template
+		$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername FROM author WHERE authorAvatarUrl = :authorAvatarUrl";
+		$statement = $pdo->prepare($query);
+		//bind authorId to the placeholder in template
+		$parameters = ["authorAvatarUrl"=>$authorAvatarUrl];
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch())!==false) {
+			try {
+				$author = new Author($row["authorId"],$row["authorActivationToken"],$row["authorAvatarUrl"],$row["authorEmail"],$row["authorHash"],$row["authorUsername"]);
+			}
+		}
 	}
 
 }
