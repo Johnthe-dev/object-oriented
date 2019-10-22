@@ -16,7 +16,7 @@ use Ramsey\Uuid\Uuid;
  * @author John Johnson-Rodgers <john@johnthe.dev>
  * @version 1.0.0
  */
-class Author{
+class Author {
 	use ValidateUuid;
 	/**
 	 * id for author; Primary Key Not Null
@@ -49,6 +49,8 @@ class Author{
 	 */
 	private $authorUsername;
 
+	//Write and document constructor method
+
 	/**
 	 * constructor for this Author
 	 *
@@ -74,6 +76,7 @@ class Author{
 			throw(new $exceptionType($exception->getMessage(), 101, $exception));
 		}
 	}
+
 	/**
 	 *accessor method for authorId
 	 *
@@ -82,14 +85,15 @@ class Author{
 	public function getAuthorId(): Uuid {
 		return ($this->authorId);
 	}
+
 	/**
 	 * mutator method for profile id
 	 *
-	 * @param  Uuid| string $newAuthorId value of new profile id
+	 * @param Uuid| string $newAuthorId value of new profile id
 	 * @throws \RangeException if $newAuthorId is not positive
 	 * @throws \TypeError if the author Id is not uuid
 	 **/
-	public function setAuthorId( $newAuthorId): void {
+	public function setAuthorId($newAuthorId): void {
 		try {
 			$uuid = self::validateUuid($newAuthorId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -108,6 +112,7 @@ class Author{
 	public function getAuthorActivationToken(): string {
 		return ($this->authorActivationToken);
 	}
+
 	/**
 	 * mutator method for authorActivationToken
 	 *
@@ -118,22 +123,22 @@ class Author{
 	 **/
 
 
-		public function setAuthorActivationToken(?string $newAuthorActivationToken): void {
-			if($newAuthorActivationToken===null) {
-				$this->authorActivationToken = null;
-				return;
-			}
-			$newAuthorActivationToken = strtolower(trim($newAuthorActivationToken));
-			if(ctype_xdigit($newAuthorActivationToken) === false) {
-				throw(new\RangeException("user activation is not valid"));
-			}
-			//make sure user activation token is exactly 32 characters
-			if(strlen($newAuthorActivationToken) !== 32) {
-				throw(new\RangeException("user activation token has to be 32"));
-			}
-			// store the activation token
-			$this->authorActivationToken = $newAuthorActivationToken;
+	public function setAuthorActivationToken(?string $newAuthorActivationToken): void {
+		if($newAuthorActivationToken === null) {
+			$this->authorActivationToken = null;
+			return;
 		}
+		$newAuthorActivationToken = strtolower(trim($newAuthorActivationToken));
+		if(ctype_xdigit($newAuthorActivationToken) === false) {
+			throw(new\RangeException("user activation is not valid"));
+		}
+		//make sure user activation token is exactly 32 characters
+		if(strlen($newAuthorActivationToken) !== 32) {
+			throw(new\RangeException("user activation token has to be 32"));
+		}
+		// store the activation token
+		$this->authorActivationToken = $newAuthorActivationToken;
+	}
 
 
 	/**
@@ -141,15 +146,16 @@ class Author{
 	 *
 	 *  string for authorAvatarUrl
 	 */
-		public function getAuthorAvatarUrl(): string {
+	public function getAuthorAvatarUrl(): string {
 		return ($this->authorAvatarUrl);
 	}
-		/**
-		 * mutator method for Author Avatar Url
-		 *
-		 * @param  String $newAuthorAvatarUrl value of new Author Avatar Url
-		 * @throws \RangeException if $newProfileId is not less than or equal to 255
-		 **/
+
+	/**
+	 * mutator method for Author Avatar Url
+	 *
+	 * @param String $newAuthorAvatarUrl value of new Author Avatar Url
+	 * @throws \RangeException if $newProfileId is not less than or equal to 255
+	 **/
 
 
 	public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
@@ -160,6 +166,7 @@ class Author{
 		// convert and store the profile id
 		$this->authorAvatarUrl = $newAuthorAvatarUrl;
 	}
+
 	/**
 	 *accessor method for authorEmail
 	 *
@@ -168,10 +175,11 @@ class Author{
 	public function getAuthorEmail(): string {
 		return ($this->authorEmail);
 	}
+
 	/**
 	 * mutator method for authorEmail
 	 *
-	 * @param  string $newAuthorEmail value Author Email
+	 * @param string $newAuthorEmail value Author Email
 	 * @throws \InvalidArgumentException if $newAuthorEmail is empty or insecure
 	 * @throws \RangeException if the author email is too large
 	 **/
@@ -198,10 +206,11 @@ class Author{
 	public function getAuthorHash(): string {
 		return ($this->authorHash);
 	}
+
 	/**
 	 * mutator method for author hash
 	 *
-	 * @param  string $newAuthorHash value of new author hashed password
+	 * @param string $newAuthorHash value of new author hashed password
 	 * @throws \InvalidArgumentException if the hash is not secure
 	 * @throws \RangeException if the hash is not 128 characters
 	 * @throws \TypeError if author hash is not a string
@@ -235,6 +244,7 @@ class Author{
 	public function getAuthorUsername(): string {
 		return ($this->authorUsername);
 	}
+
 	/**
 	 * mutator method for author username
 	 *
@@ -260,7 +270,62 @@ class Author{
 		$this->authorUsername = $newAuthorUsername;
 	}
 
-	//Write and document constructor method
+	/**
+	 * inserts this Author into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo): void {
+
+		// create query template
+		$query = "INSERT INTO author(authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername) VALUES(:AuthorId, :AuthorActivationToken, :AuthorAvatarUrl, :AuthorEmail, :AuthorHash, :AuthorUsername)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holders in the template
+		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash,"authorUsername" => $this->authorUsername];
+		$statement->execute($parameters);
+	}
+
+
+	/**
+	 * deletes this Tweet from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function delete(\PDO $pdo): void {
+
+		// create query template
+		$query = "DELETE FROM author WHERE authorId = :authorId";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = ["tweetId" => $this->tweetId->getBytes()];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * updates this Tweet in mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function update(\PDO $pdo): void {
+
+		// create query template
+		$query = "UPDATE tweet SET tweetProfileId = :tweetProfileId, tweetContent = :tweetContent, tweetDate = :tweetDate WHERE tweetId = :tweetId";
+		$statement = $pdo->prepare($query);
+
+
+		$formattedDate = $this->tweetDate->format("Y-m-d H:i:s.u");
+		$parameters = ["tweetId" => $this->tweetId->getBytes(), "tweetProfileId" => $this->tweetProfileId->getBytes(), "tweetContent" => $this->tweetContent, "tweetDate" => $formattedDate];
+		$statement->execute($parameters);
+	}
+
 
 }
 
