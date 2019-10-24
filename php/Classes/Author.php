@@ -379,6 +379,8 @@ class Author {
 		} else {
 			throw (new \PDOException("Not a valid URL", 0));
 		}
+//Changes format of the valid URL to standardize format
+		$authorAvatarUrl = filter_var($authorAvatarUrl, FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED);
 
 		// create query template
 		$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername FROM author WHERE authorAvatarUrl = :authorAvatarUrl";
