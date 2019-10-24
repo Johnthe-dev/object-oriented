@@ -372,7 +372,9 @@ class Author {
 	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl) : \SplFixedArray {
 		//filter URL, throw any invalid urls
 		if (filter_var($authorAvatarUrl, FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED)) {
-
+			if(strlen($authorAvatarUrl) > 255) {
+				throw (new \PDOException("URL is too long",0));
+			}
 		} else {
 			throw (new \PDOException("Not a valid URL",0));
 		}
