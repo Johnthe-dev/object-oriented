@@ -370,8 +370,13 @@ class Author {
 	 */
 	//May seem pointless, but what if the authorAvatarUrl is some sort of indicator of author rating or something? sure, there is no rating attribute...
 	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl) : \SplFixedArray {
-		//no need to change authorAvatarUrl, except to make sure to escape potentially malicious code
-		//add malicious code remover here
+		//filter URL, throw any invalid urls
+		if (filter_var($authorAvatarUrl, FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED)) {
+
+		} else {
+			throw (new \PDOException("Not a valid URL",0));
+		}
+
 		// create query template
 		$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername FROM author WHERE authorAvatarUrl = :authorAvatarUrl";
 		$statement = $pdo->prepare($query);
