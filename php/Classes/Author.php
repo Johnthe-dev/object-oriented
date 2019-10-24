@@ -7,12 +7,13 @@ require_once("autoload.php");
 require_once(dirname(__DIR__) . "/lib/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
+
 /** Author Class for Object-Oriented-Phase 1
  *
  *This is an example class that I am creating in order to improve my familiarity with OOP and PHP.
  *
- * references:	Example code: 	https://bootcamp-coders.cnm.edu/class-materials/object-oriented/object-oriented-php.php
- * 				Assignment: 	https://app.slack.com/docs/T053NFY3R/FP1KTPB35?origin_team=T053NFY3R
+ * references:   Example code:   https://bootcamp-coders.cnm.edu/class-materials/object-oriented/object-oriented-php.php
+ *            Assignment:   https://app.slack.com/docs/T053NFY3R/FP1KTPB35?origin_team=T053NFY3R
  * @author John Johnson-Rodgers <john@johnthe.dev>
  * @version 1.0.0
  */
@@ -284,7 +285,7 @@ class Author {
 		$statement = $pdo->prepare($query);
 
 		// bind the member variables to the place holders in the template
-		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash,"authorUsername" => $this->authorUsername];
+		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
 		$statement->execute($parameters);
 	}
 
@@ -322,7 +323,7 @@ class Author {
     authorHash = :authorHash, authorUsername = :authorUsername WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
 
-		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this -> authorUsername];
+		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this->authorUsername];
 		$statement->execute($parameters);
 	}
 
@@ -335,7 +336,7 @@ class Author {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when a variable are not the correct data type
 	 **/
-	public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
+	public static function getAuthorByAuthorId(\PDO $pdo, $authorId): ?Author {
 		// sanitize authorId before running
 		try {
 			$authorId = self::validateUuid($authorId);
@@ -353,13 +354,13 @@ class Author {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$author = new Author($row["authorId"],$row["authorActivationToken"],$row["authorAvatarUrl"],$row["authorEmail"],$row["authorHash"],$row["authorUsername"]);
+				$author = new Author($row["authorId"], $row["authorActivationToken"], $row["authorAvatarUrl"], $row["authorEmail"], $row["authorHash"], $row["authorUsername"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row can't be converted, rethrow it
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
-		return($author);
+		return ($author);
 	}
 
 	/**
@@ -369,28 +370,28 @@ class Author {
 	 * @throws \PDOException when mySQL related error occurs
 	 */
 	//May seem pointless, but what if the authorAvatarUrl is some sort of indicator of author rating or something? sure, there is no rating attribute...
-	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl) : \SplFixedArray {
+	public static function getAuthorByAuthorAvatarUrl(\PDO $pdo, $authorAvatarUrl): \SplFixedArray {
 		//filter URL, throw any invalid urls
-		if (filter_var($authorAvatarUrl, FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED)) {
+		if(filter_var($authorAvatarUrl, FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED)) {
 			if(strlen($authorAvatarUrl) > 255) {
-				throw (new \PDOException("URL is too long",0));
+				throw (new \PDOException("URL is too long", 0));
 			}
 		} else {
-			throw (new \PDOException("Not a valid URL",0));
+			throw (new \PDOException("Not a valid URL", 0));
 		}
 
 		// create query template
 		$query = "SELECT authorId, authorActivationToken, authorAvatarUrl, authorEmail, authorHash, authorUsername FROM author WHERE authorAvatarUrl = :authorAvatarUrl";
 		$statement = $pdo->prepare($query);
 		//bind authorId to the placeholder in template
-		$parameters = ["authorAvatarUrl"=>$authorAvatarUrl];
+		$parameters = ["authorAvatarUrl" => $authorAvatarUrl];
 		$statement->execute($parameters);
 		//build an array of authors who have same authorAvatarUrl
-		$authors=new \SplFixedArray($statement->rowCount());
+		$authors = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch())!==false) {
+		while(($row = $statement->fetch()) !== false) {
 			try {
-				$author = new Author($row["authorId"],$row["authorActivationToken"],$row["authorAvatarUrl"],$row["authorEmail"],$row["authorHash"],$row["authorUsername"]);
+				$author = new Author($row["authorId"], $row["authorActivationToken"], $row["authorAvatarUrl"], $row["authorEmail"], $row["authorHash"], $row["authorUsername"]);
 				$authors[$authors->key()] = $author;
 				$authors->next();
 			} catch(\Exception $exception) {
@@ -398,7 +399,7 @@ class Author {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
-		return($authors);
+		return ($authors);
 	}
 
 }
