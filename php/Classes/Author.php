@@ -62,7 +62,7 @@ class Author {
 	 * @param string $newAuthorUsername username of this author or null if a new author
 	 *
 	 **/
-	public function __construct($newAuthorId, $newAuthorActivationToken, $newAuthorAvatarUrl, $newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
+	public function __construct($newAuthorId, string $newAuthorActivationToken, string $newAuthorAvatarUrl, string $newAuthorEmail, string $newAuthorHash, string $newAuthorUsername) {
 
 		try {
 			$this->setAuthorId($newAuthorId);
@@ -317,7 +317,9 @@ class Author {
 	public function update(\PDO $pdo): void {
 
 		// create query template
-		$query = "UPDATE author SET authorActivationToken = :authorActivationToken, authorAvatarUrl = :authorAvatarUrl, authorEmail = :authorEmail, authorHash = :authorHash, authorUsername = :authorUsername WHERE authorId = :authorId";
+		$query = "UPDATE author SET authorActivationToken = :authorActivationToken, 
+    authorAvatarUrl = :authorAvatarUrl, authorEmail = :authorEmail, 
+    authorHash = :authorHash, authorUsername = :authorUsername WHERE authorId = :authorId";
 		$statement = $pdo->prepare($query);
 
 		$parameters = ["authorId" => $this->authorId->getBytes(), "authorActivationToken" => $this->authorActivationToken, "authorAvatarUrl" => $this->authorAvatarUrl, "authorEmail" => $this->authorEmail, "authorHash" => $this->authorHash, "authorUsername" => $this -> authorUsername];
